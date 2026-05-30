@@ -26,7 +26,7 @@ El futuro de los datos estructurados y enlazados. En esta sección profundizo en
 * **Neo4j (Cypher):** Base de datos de grafos de propiedades. Uso del lenguaje Cypher mediante patrones visuales ASCII para operaciones CRUD complejas y análisis de relaciones nativas de primer orden.
 
 ## 🚀 Cómo visualizar el proyecto
-1. **En producción:** Puedes acceder a la versión desplegada en vivo a través de **GitHub Pages**.
+1. **En producción:** Puedes acceder a la versión desplegada en vivo a través de [**GitHub Pages**](https://gorkabidaa.github.io/Apuntes_noSQL/).
 2. **En local:** Clona este repositorio en tu máquina local y abre el archivo `index.html` con cualquier navegador web moderno.
 
 ---
