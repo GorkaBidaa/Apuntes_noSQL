@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta name="description" content="Descripciones y referencias sobre bases de datos NoSQL (MongoDB, Redis, Cassandra, Neo4j) y tecnologías de la Web Semántica (RDF, SPARQL, SHACL, OWL).">
+    
+    <meta property="og:title" content="Bases de datos NoSQL y Web Semántica">
+    <meta property="og:description" content="Guía y descripciones de referencia sobre bases de datos NoSQL y Web Semántica.">
+    <meta property="og:type" content="website">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-site-verification" content="AITMhBbFRnYneQLza5XTlr9hSHriQklpN0OA6p5wi4M" />
+    <title>Bases de datos NoSQL y Web Semántica</title>
+    <style>
+        :root {
+            --primary-color: #0f172a;
+            --accent-color: #2563eb;
+            --bg-color: #f1f5f9;
+            --content-bg: #ffffff;
+            --text-color: #334155;
+            --border-color: #e2e8f0;
+            
+            /* Light theme for code blocks */
+            --code-bg: #f8fafc;
+            --code-text: #0f172a;
+            --code-comment: #94a3b8;
+            --code-keyword: #0284c7;
+            --code-string: #16a34a;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+            border-bottom: 4px solid var(--accent-color);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        header p {
+            margin-top: 0.5rem;
+            color: #94a3b8;
+            font-size: 1.1rem;
+        }
+
+        main {
+            max-width: 1000px;
+            margin: -2rem auto 2rem auto;
+            background: var(--content-bg);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        /* Tabs System CSS */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            background-color: #f8fafc;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 1rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+            white-space: nowrap;
+        }
+
+        .tab-btn:hover {
+            color: var(--accent-color);
+            background-color: #f1f5f9;
+        }
+
+        .tab-btn.active {
+            color: var(--accent-color);
+            border-bottom-color: var(--accent-color);
+            background-color: var(--content-bg);
+        }
+
+        .tab-content {
+            display: none;
+            padding: 2.5rem;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Content Styling */
+        h2 {
+            color: var(--primary-color);
+            margin-top: 0;
+            font-size: 1.8rem;
+            border-bottom: 2px solid var(--bg-color);
+            padding-bottom: 0.5rem;
+        }
+
+        h3 {
+            color: var(--accent-color);
+            margin-top: 2rem;
+            font-size: 1.2rem;
+        }
+
+        ul.concept-list {
+            padding-left: 1.2rem;
+        }
+
+        ul.concept-list li {
+            margin-bottom: 0.8rem;
+        }
+
+        code.inline {
+            background-color: var(--bg-color);
+            color: #db2777;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9em;
+        }
+
+        pre {
+            background-color: var(--code-bg);
+            color: var(--code-text);
+            padding: 1.5rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+
+        .comment { color: var(--code-comment); font-style: italic; }
+        .keyword { color: var(--code-keyword); font-weight: bold; }
+        .string { color: var(--code-string); }
+
+        .note {
+            background-color: #eff6ff;
+            border-left: 4px solid var(--accent-color);
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 6px 6px 0;
+            overflow-x: auto;
+            line-height: 1.8;
+        }
+        
+        .description-block {
+            font-size: 1.05rem;
+            color: #475569;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Bases de datos NoSQL</h1>
+        <p>Referencia de Arquitectura de Datos y Web Semántica</p>
+    </header>
+
+    <main>
+        <div class="tabs">
+            <button class="tab-btn active" onclick="openTab(event, 'mongodb')">MongoDB</button>
+            <button class="tab-btn" onclick="openTab(event, 'redis')">Redis</button>
+            <button class="tab-btn" onclick="openTab(event, 'cassandra')">Cassandra</button>
+            <button class="tab-btn" onclick="openTab(event, 'neo4j')">Neo4j (Cypher)</button>
+            <button class="tab-btn" onclick="openTab(event, 'rdf')">RDF & RDFS</button>
+            <button class="tab-btn" onclick="openTab(event, 'sparql')">SPARQL</button>
+            <button class="tab-btn" onclick="openTab(event, 'shacl')">SHACL</button>
+            <button class="tab-btn" onclick="openTab(event, 'owl')">OWL</button>
+        </div>
+
+        <div id="mongodb" class="tab-content active">
+            <h2>MongoDB</h2>
+            <p class="description-block">Base de datos NoSQL orientada a documentos BSON (JSON binario). Destaca por su flexibilidad para almacenar esquemas dinámicos, su agilidad en el desarrollo y su facilidad para escalar horizontalmente mediante particionamiento (sharding).</p>
+
+            <h3>Lectura</h3>
+            <ul class="concept-list">
+                <li><code class="inline">db.coleccion.find({ campo: "valor" })</code>: Busca documentos.</li>
+                <li>Esquema:
+                    <ul class="concept-list" style="margin-top: 0.5rem;">
+                        <li><code class="inline">db.coleccion.find({ BUSQUEDA }, { PROYECCION })</code></li>
+                        <li class="comment"># Llaves 1 {}: Dónde se busca (Filtro). 1=está/cumple, 0=no está.</li>
+                        <li class="comment"># Llaves 2 {}: Qué se muestra (Resultado). 1=ver campo, 0=ocultar campo.</li>
+                        <li>Ejemplo: <code class="inline">db.ejemplo.find({ age: 22 }, { nombre: 1, _id: 0 })</code></li>
+                    </ul>
+                </li>
+                <li><code class="inline">db.coleccion.find({ "direccion.ciudad": "Madrid" })</code>: <strong>Dot notation</strong> para buscar en objetos anidados (obligatorio usar comillas).</li>
+                <li><code class="inline">.sort({ campo: 1 })</code>: Ordena (1 ascendente, -1 descendente).</li>
+                <li><code class="inline">.limit(n)</code> / <code class="inline">.skip(n)</code>: Limita resultados o salta documentos.</li>
+                <li><code class="inline">db.coleccion.countDocuments({ filtro })</code>: <strong>Conteo</strong> exacto de documentos que coinciden con el filtro.</li>
+            </ul>
+
+            <h3>Operadores de Búsqueda</h3>
+            <ul class="concept-list">
+                <li><strong>Comparación:</strong> 
+                    <code class="inline">$eq</code> (igual), <code class="inline">$ne</code> (distinto), 
+                    <code class="inline">$gt</code> (mayor que), <code class="inline">$gte</code> (mayor o igual), 
+                    <code class="inline">$lt</code> (menor que), <code class="inline">$lte</code> (menor o igual).
+                </li>
+                <li><strong>Lógicos:</strong> 
+                    <code class="inline">$and</code>, <code class="inline">$or</code>, <code class="inline">$not</code>, <code class="inline">$nor</code>.<br>
+                    <span class="comment">Ej: <code class="inline">db.ejemplo.find({ $or: [{ becado: true }, { edad: { $lt: 20 } }] })</code></span>
+                </li>
+                <li><strong>Arrays:</strong> 
+                    <code class="inline">$in</code> (valor dentro del array), <code class="inline">$nin</code> (valor no está).<br>
+                    <code class="inline">$size</code> (busca arrays con una longitud exacta). Ej: <code class="inline">{ idiomas: { $size: 2 } }</code><br>
+                    <code class="inline">$elemMatch</code> (encuentra documentos donde al menos un elemento del array cumple alguna condición).<br>
+                    <span class="comment">Ej: <code class="inline">db.ejemplo.find({ compra: { $elemMatch: { producto: "huevos", cantidad: { $gt: 12 } } } })</code></span>
+                </li>
+                <li><strong>Regex (Expresiones Regulares):</strong> Para buscar texto.<br>
+                    <span class="comment">Empieza por A: <code class="inline">{ nombre: { $regex: "^A" } }</code></span><br>
+                    <span class="comment">Termina en @hotmail.com: <code class="inline">{ email: { $regex: "@hotmail\\.com$" } }</code></span>
+                </li>
+                <li><strong>Elementos:</strong> 
+                    <code class="inline">$exists: true</code> (comprueba si el campo existe), 
+                    <code class="inline">$type</code> (comprueba el tipo de dato).
+                </li>
+            </ul>
+
+            <h3>Escritura y Borrado</h3>
+            <ul class="concept-list">
+                <li><code class="inline">db.coleccion.insertOne({ ... })</code>: Inserta un documento.</li>
+                <li><code class="inline">db.coleccion.insertMany([ ... ])</code>: Inserta varios documentos a la vez.</li>
+                <li><code class="inline">db.coleccion.deleteOne({ filtro })</code>: Borra el primer documento que coincida.</li>
+                <li><code class="inline">db.coleccion.deleteMany({ filtro })</code>: Borra todos los documentos que coincidan.</li>
+            </ul>
+
+            <h3>Actualización de Documentos</h3>
+            <ul class="concept-list">
+                <li><code class="inline">db.coleccion.updateOne({ filtro }, { $operadores })</code>: Actualiza el primer documento que coincida.</li>
+                <li><code class="inline">db.coleccion.updateMany({ filtro }, { $operadores })</code>: Actualiza todos los que coincidan.
+                    <ul class="concept-list" style="margin-top: 0.5rem;">
+                        <li><code class="inline">$set</code>: Modifica el valor de un campo o lo crea si no existe.</li>
+                        <li><code class="inline">$inc</code>: Incrementa un valor numérico. Ej: <code class="inline">{ $inc: { age: 1 } }</code></li>
+                        <li><code class="inline">$rename</code>: Cambia el nombre de un campo. Ej: <code class="inline">{ $rename: { "becado": "tieneBeca" } }</code></li>
+                        <li><code class="inline">$unset</code>: Elimina un campo completamente. Ej: <code class="inline">{ $unset: { becado: "" } }</code></li>
+                        <li><code class="inline">$push</code>: Añade un elemento al final de un array.</li>
+                        <li><code class="inline">$pull</code>: Elimina un elemento específico de un array.</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <h3>Agregación (Aggregation Pipeline)</h3>
+            <p style="margin-bottom: 0.5rem;">Procesamiento de datos en etapas secuenciales: <code class="inline">db.coleccion.aggregate([ { etapa1 }, { etapa2 } ])</code></p>
+            <ul class="concept-list">
+                <li><code class="inline">$match</code>: Filtra documentos (misma sintaxis que `find()`). <br>
+                    <span class="comment">Ej: <code class="inline">{ $match: { total: { $gt: 100 } } }</code></span>
+                </li>
+                <li><code class="inline">$group</code>: Agrupa documentos por un campo específico (`_id`) y aplica acumuladores.<br>
+                    <span class="comment">Ej: <code class="inline">{ $group: { _id: "$cliente", gastoTotal: { $sum: "$total" } } }</code></span>
+                </li>
+                <li><code class="inline">$unwind</code>: Desglosa un array. Si un pedido tiene 3 productos, crea 3 documentos independientes para pasar a la siguiente etapa.<br>
+                    <span class="comment">Ej: <code class="inline">{ $unwind: "$productos" }</code></span>
+                </li>
+                <li><code class="inline">$sort</code>: Ordena los resultados. Ej: <code class="inline">{ $sort: { gastoTotal: -1 } }</code></li>
+                <li><strong>Operadores de fecha:</strong> <code class="inline">$month</code>, <code class="inline">$year</code>, etc. para agrupar.<br>
+                    <span class="comment">Ej: <code class="inline">{ $group: { _id: { $month: "$fecha" }, totalPedidos: { $sum: 1 } } }</code></span>
+                </li>
+            </ul>
+        </div>
+
+        <div id="redis" class="tab-content">
+            <h2>Redis</h2>
+            <p class="description-block">Base de datos NoSQL en memoria de tipo Clave-Valor. Al almacenar los datos en la memoria RAM en lugar de en discos duros, ofrece latencias sub-milisegundo. Es la herramienta por excelencia para gestionar cachés, almacenar sesiones web, crear rankings en tiempo real y manejar colas de mensajería rápida.</p>
+
+            <h3>Comandos Básicos (Strings)</h3>
+            <ul class="concept-list">
+                <li><code class="inline">SET clave "valor"</code>: Guarda un valor asignado a una clave.</li>
+                <li><code class="inline">GET clave</code>: Recupera el valor de la clave.</li>
+                <li><code class="inline">DEL clave</code>: Elimina la clave y su valor.</li>
+                <li><code class="inline">INCR / DECR clave</code>: Incrementa o decrementa atómicamente un valor numérico (ideal para contadores).</li>
+                <li><code class="inline">EXISTS clave</code>: Devuelve 1 si la clave existe, 0 si no.</li>
+                <li><code class="inline">EXPIRE clave 60</code>: Define un tiempo de vida (TTL) de 60 segundos para la clave (se autodestruye).</li>
+            </ul>
+
+            <h3>Estructuras de Datos Avanzadas</h3>
+            <ul class="concept-list">
+                <li><strong>Hashes (Objetos simples):</strong> Como objetos JSON de 1 nivel de profundidad.
+                    <br><code class="inline">HSET usuario:100 nombre "Juan" age 28</code>
+                    <br><code class="inline">HGET usuario:100 nombre</code> (Devuelve "Juan")
+                    <br><code class="inline">HGETALL usuario:100</code> (Devuelve todos los campos y valores)
+                </li>
+                <li><strong>Lists (Listas/Arrays):</strong> Colecciones ordenadas según inserción (útil para colas/stacks).
+                    <br><code class="inline">LPUSH cola_tareas "tarea1"</code> (Añade por la izquierda/inicio)
+                    <br><code class="inline">RPUSH cola_tareas "tarea2"</code> (Añade por la derecha/final)
+                    <br><code class="inline">RPOP cola_tareas</code> (Saca y devuelve el último elemento)
+                </li>
+                <li><strong>Sets (Conjuntos):</strong> Colecciones desordenadas de strings únicos (sin duplicados).
+                    <br><code class="inline">SADD etiquetas "nosql" "bd" "redis"</code>
+                    <br><code class="inline">SREM etiquetas "bd"</code> (Elimina el elemento)
+                    <br><code class="inline">SISMEMBER etiquetas "nosql"</code> (Verifica si existe, O(1) de complejidad)
+                </li>
+                <li><strong>Sorted Sets (Conjuntos Ordenados):</strong> Conjuntos únicos pero con una "puntuación" (score) para ordenarlos (ideal para Leaderboards).
+                    <br><code class="inline">ZADD ranking 1500 "Juan"</code> (Añade a Juan con 1500 puntos)
+                    <br><code class="inline">ZADD ranking 1800 "Ana"</code>
+                    <br><code class="inline">ZREVRANGE ranking 0 -1 WITHSCORES</code> (Devuelve el ranking de mayor a menor)
+                </li>
+            </ul>
+
+            <h3>Pub/Sub (Publicación/Suscripción)</h3>
+            <ul class="concept-list">
+                <li>Redis puede actuar como un broker de mensajería rápido (los mensajes no se guardan, es en tiempo real).</li>
+                <li><code class="inline">SUBSCRIBE canal_alertas</code>: El cliente se queda escuchando ese canal.</li>
+                <li><code class="inline">PUBLISH canal_alertas "Error en el servidor"</code>: Envía el mensaje a todos los suscritos.</li>
+            </ul>
+
+            <h3>Persistencia en Redis</h3>
+            <ul class="concept-list">
+                <li>A pesar de ser "en memoria", Redis puede guardar los datos a disco de dos formas:</li>
+                <li><strong>RDB (Redis Database):</strong> Toma "snapshots" (capturas) de la memoria cada X minutos. Consume pocos recursos pero puedes perder los últimos minutos si hay un fallo.</li>
+                <li><strong>AOF (Append Only File):</strong> Guarda cada operación de escritura en un log. Es más seguro (no hay pérdida de datos) pero el archivo crece más y la recuperación es más lenta.</li>
+            </ul>
+        </div>
+
+        <div id="cassandra" class="tab-content">
+            <h2>Cassandra (CQL)</h2>
+            <p class="description-block">Base de datos NoSQL distribuida y orientada a familias de columnas. Está construida para manejar cantidades masivas de datos a lo largo de múltiples servidores sin un único punto de fallo (arquitectura peer-to-peer). Es perfecta para cargas de trabajo con escrituras muy pesadas (IoT, registros, series temporales) donde la disponibilidad continua es prioritaria.</p>
+
+            <h3>Estructura Lógica y Consistencia</h3>
+            <ul class="concept-list">
+                <li><code class="inline">Keyspace</code>: Equivalente a la Base de Datos. Al crearlo se define la estrategia y el factor de replicación (ej: en cuántos nodos físicos se copia el dato).</li>
+                <li><code class="inline">Table</code> o <code class="inline">Column Family</code>: Equivalente a las tablas relacionales.</li>
+                <li><strong>Niveles de Consistencia:</strong> Cada consulta puede especificar cuántos nodos deben responder para considerarla exitosa. Ejemplos: <code class="inline">ONE</code> (rápido pero posible lectura sucia), <code class="inline">QUORUM</code> (mayoría, el más balanceado), <code class="inline">ALL</code> (seguro pero si cae un nodo, falla).</li>
+                <li><strong>Tombstones:</strong> Al borrar un dato en Cassandra, no se elimina inmediatamente de disco, sino que se marca con una "lápida" (tombstone) que se propaga a los demás nodos. El borrado real ocurre más tarde (Compaction).</li>
+            </ul>
+
+            <h3>Comandos Principales CQL</h3>
+            <ul class="concept-list">
+                <li><strong>Crear Keyspace:</strong><br>
+                    <code class="inline">CREATE KEYSPACE mi_app WITH replication = {'class': 'SimpleStrategy', 'replication_factor' : 3};</code>
+                </li>
+                <li><strong>Insertar Datos:</strong><br>
+                    <code class="inline">INSERT INTO usuarios (id, nombre, email) VALUES (uuid(), 'Juan', 'juan@ejemplo.com');</code>
+                </li>
+                <li><strong>Leer Datos:</strong><br>
+                    <code class="inline">SELECT * FROM usuarios WHERE nombre = 'Juan' ALLOW FILTERING;</code><br>
+                    <span class="comment">Nota: ALLOW FILTERING es peligroso en producción porque escanea clústeres enteros si 'nombre' no es clave.</span>
+                </li>
+            </ul>
+
+            <div class="note">
+                <strong>Modelado de Datos (La Clave Primaria es el Rey):</strong><br><br>
+                En Cassandra no se modela pensando en relaciones, sino en las consultas que vas a hacer. La <strong>PRIMARY KEY</strong> tiene dos partes:<br><br>
+                <code class="inline">PRIMARY KEY ((ciudad), edad, id_usuario)</code><br><br>
+                1. <strong>Partition Key</strong> <code class="inline">(ciudad)</code>: Decide en qué nodo físico del servidor se guardan los datos. Todos los usuarios de la misma ciudad van al mismo servidor.<br>
+                2. <strong>Clustering Key</strong> <code class="inline">edad, id_usuario</code>: Decide cómo se ordenan los datos dentro de esa partición (nodo). En este caso, por edad y luego por id.<br><br>
+                <em>Regla de oro:</em> Tus cláusulas <code class="inline">WHERE</code> deben usar siempre la Partition Key primero, o Cassandra se negará a ejecutar la consulta.
+            </div>
+        </div>
+
+        <div id="neo4j" class="tab-content">
+            <h2>Neo4j (Cypher)</h2>
+            <p class="description-block">Motor principal de bases de datos NoSQL orientadas a Grafos de Propiedades. A diferencia de las BD relacionales, en Neo4j las relaciones son objetos de primera clase. Es indispensable para problemas donde el "cómo se conectan los datos" es más importante que el dato en sí (ej: prevención de fraude bancario, motores de recomendación, rutas de red).</p>
+
+            <h3>Conceptos Clave del Grafo</h3>
+            <ul class="concept-list">
+                <li><strong>Nodos (Nodes):</strong> Representan entidades (personas, productos, ciudades). Pueden tener cero, una o múltiples "Etiquetas" (Labels) para categorizarlos.</li>
+                <li><strong>Relaciones (Relationships):</strong> Conectan dos nodos. <em>Siempre</em> tienen una dirección y un tipo. Una relación no puede existir sin un nodo de origen y destino.</li>
+                <li><strong>Propiedades (Properties):</strong> Pares clave-valor (como JSON) que se pueden almacenar tanto en los Nodos como en las Relaciones. (Ej: Una relación "AMIGOS_DE" puede tener una propiedad "desde_año: 2015").</li>
+            </ul>
+
+            <h3>Lenguaje Cypher (Patrones)</h3>
+            <p>Cypher usa arte ASCII para representar visualmente el grafo en las consultas:</p>
+            <ul class="concept-list">
+                <li><code class="inline">(p:Persona)</code>: Los paréntesis representan un Nodo de la etiqueta Persona asignado a la variable 'p'.</li>
+                <li><code class="inline">-[:CONOCE_A]-></code>: Las flechas y corchetes representan Relaciones y su dirección.</li>
+            </ul>
+
+            <h3>Operaciones Básicas (CRUD)</h3>
+            <pre><code><span class="comment">// 1. CREAR Nodos y Relaciones a la vez</span>
+<span class="keyword">CREATE</span> (juan:Persona {nombre: <span class="string">'Juan'</span>, edad: 30})
+<span class="keyword">CREATE</span> (madrid:Ciudad {nombre: <span class="string">'Madrid'</span>, pais: <span class="string">'España'</span>})
+<span class="keyword">CREATE</span> (juan)-[:VIVE_EN {desde: 2018}]-&gt;(madrid)
+
+<span class="comment">// 2. LEER (Buscar patrones con MATCH)</span>
+<span class="comment">// Encontrar todos los amigos de Juan que viven en Madrid</span>
+<span class="keyword">MATCH</span> (p:Persona {nombre: <span class="string">'Juan'</span>})-[:CONOCE_A]-&gt;(amigo:Persona)-[:VIVE_EN]-&gt;(c:Ciudad {nombre: <span class="string">'Madrid'</span>})
+<span class="keyword">RETURN</span> amigo.nombre, amigo.edad
+
+<span class="comment">// 3. ACTUALIZAR (Modificar propiedades con SET)</span>
+<span class="keyword">MATCH</span> (p:Persona {nombre: <span class="string">'Juan'</span>})
+<span class="keyword">SET</span> p.edad = 31, p.profesion = <span class="string">'Ingeniero'</span>
+<span class="keyword">RETURN</span> p
+
+<span class="comment">// 4. BORRAR (Nodos y sus relaciones)</span>
+<span class="keyword">MATCH</span> (p:Persona {nombre: <span class="string">'Juan'</span>})
+<span class="keyword">DETACH DELETE</span> p <span class="comment">// DETACH asegura que se borren primero sus relaciones, evitando nodos huérfanos</span>
+</code></pre>
+        </div>
+
+        <div id="rdf" class="tab-content">
+            <h2>RDF & RDFS</h2>
+            <p class="description-block">El marco de trabajo (Resource Description Framework) principal de la Web Semántica del W3C. A diferencia de las BD transaccionales tradicionales, RDF está pensado para que la información de internet pueda ser leída y entendida por máquinas. RDFS (RDF Schema) amplía RDF proporcionando el vocabulario base para establecer jerarquías (clases y subclases).</p>
+
+            <h3>Conceptos Fundamentales</h3>
+            <ul class="concept-list">
+                <li><strong>Estructura del dato:</strong> Triples (<code class="inline">Sujeto &rarr; Predicado &rarr; Objeto</code>).</li>
+                <li><strong>Identificación:</strong> Todo se identifica mediante URIs.</li>
+            </ul>
+
+            <h3>Vocabulario RDFS (Esquema básico)</h3>
+            <ul class="concept-list">
+                <li><code class="inline">rdfs:Class</code>: Define una categoría o clase.</li>
+                <li><code class="inline">rdfs:subClassOf</code>: Crea jerarquías de clases (ej: Mujer es subclase de Persona).</li>
+                <li><code class="inline">rdfs:Property</code>: Define una relación o atributo.</li>
+                <li><code class="inline">rdfs:domain</code>: Indica de qué clase es el sujeto de una propiedad.</li>
+                <li><code class="inline">rdfs:range</code>: Indica de qué clase (o tipo de dato) es el objeto de una propiedad.</li>
+                <li><code class="inline">rdfs:label</code> / <code class="inline">rdfs:comment</code>: Anotaciones para humanos.</li>
+                <li><strong>Tipos de datos:</strong> Se usan los de XML Schema (ej: <code class="inline">xsd:integer</code>, <code class="inline">xsd:string</code>, <code class="inline">xsd:date</code>).</li>
+            </ul>
+        </div>
+
+        <div id="sparql" class="tab-content">
+            <h2>SPARQL</h2>
+            <p class="description-block">Es el lenguaje de consulta estándar (similar a SQL pero para grafos) diseñado para recuperar y manipular datos almacenados en formato RDF. Permite realizar consultas federadas, es decir, buscar información de forma simultánea a través de múltiples bases de conocimiento distribuidas por toda la web.</p>
+
+            <h3>Consultas de lectura</h3>
+            <ul class="concept-list">
+                <li><code class="inline">FILTER</code>: Filtra resultados por condiciones (ej: <code class="inline">regex</code>, <code class="inline">&gt;</code>, <code class="inline">&lt;</code>, <code class="inline">!</code>, <code class="inline">&&</code>, <code class="inline">||</code>).
+                    <ul class="concept-list" style="margin-top: 0.5rem; margin-bottom: 0.5rem;">
+                        <li><strong>Empieza por:</strong> <code class="inline">FILTER regex(?nombre, "^texto")</code></li>
+                        <li><strong>Termina en:</strong> <code class="inline">FILTER regex(?nombre, "texto$")</code></li>
+                        <li><strong>Comodines (.*):</strong> El punto significa "cualquier carácter" y el asterisco "cero o más veces".
+                            <ul class="concept-list" style="margin-top: 0.3rem;">
+                            </ul>
+                        </li>
+                        <li class="comment">Nota: En SPARQL 1.1 es preferible usar las funciones nativas <code class="inline">CONTAINS()</code>, <code class="inline">STRSTARTS()</code> y <code class="inline">STRENDS()</code> ya que consumen menos recursos que regex (a menos que necesites patrones complejos con .*).</li>
+                    </ul>
+                </li>
+                <li><code class="inline">OPTIONAL</code>: Busca datos que podrían no existir sin descartar el resto del resultado.</li>
+                <li><code class="inline">UNION</code>: Combina los resultados de dos patrones distintos.</li>
+                <li><code class="inline">DISTINCT</code>: Elimina resultados duplicados.</li>
+                <li><code class="inline">ORDER BY</code>: Ordena por ASC (ascendente) o DESC (descendente).</li>
+                <li><code class="inline">LIMIT</code> / <code class="inline">OFFSET</code>: Para paginación de resultados.</li>
+                <li><code class="inline">ASK</code>: Devuelve un simple "sí" o "no" si el patrón existe.</li>
+            </ul>
+
+            <h3>Agrupación y Funciones</h3>
+            <ul class="concept-list">
+                <li><code class="inline">COUNT</code>: Contar resultados (ej: <code class="inline">COUNT(?person) AS ?total</code>).</li>
+                <li><code class="inline">GROUP BY</code>: Agrupar resultados por valores de una variable.</li>
+                <li><strong>FECHA/HORA:</strong> <code class="inline">NOW()</code>, <code class="inline">YEAR</code> / <code class="inline">MONTH</code> / <code class="inline">DAY</code>.</li>
+                <li><code class="inline">MINUS</code>: Excluir resultados (<code class="inline">... MINUS { ... }</code>).</li>
+            </ul>
+
+            <h3>Operaciones de escritura</h3>
+            <ul class="concept-list">
+                <li><code class="inline">Inserciones</code>:
+                    <ul class="concept-list" style="margin-top: 0.5rem; margin-bottom: 0.5rem;">
+                        <li><code class="inline">INSERT DATA { ... }</code>: Inserta triples <strong>exactos</strong>.<br>
+                        <span class="comment">Ej: <code class="inline">INSERT DATA { &lt;http://ejemplo.org/Juan&gt; &lt;http://ejemplo.org/esAmigoDe&gt; &lt;http://ejemplo.org/Ana&gt; }</code></span></li>
+                        <li><code class="inline">INSERT { ... } WHERE { ... }</code>: Inserta nuevos triples de forma basándose en los resultados de una consulta previa.<br>
+                        <span class="comment">Ej: <code class="inline">INSERT { ?persona &lt;ex:esAdulto&gt; true } WHERE { ?persona &lt;ex:edad&gt; ?edad . FILTER(?edad >= 18) }</code></span></li>
+                    </ul>
+                </li>
+                <li><code class="inline">DELETE DATA { ... }</code>: Borra triples exactos (sin usar variables).</li>
+                <li><code class="inline">DELETE { ... } WHERE { ... }</code>: Borra datos dinámicamente usando variables que coincidan con el patrón del WHERE.</li>
+                <li><code class="inline">DELETE WHERE { ... }</code>: Forma abreviada para borrar los triples que coincidan exactamente con el patrón de búsqueda.</li>
+            </ul>
+
+            <h3>Comandos cURL (Graph Store Protocol)</h3>
+            <ul class="concept-list">
+                <li>
+                    <strong>Recuperar un grafo (GET):</strong><br>
+                    <code class="inline">curl -X GET http://[IP]:7200/repositories/[REPO]/rdf-graphs/service?graph=[URI_DEL_GRAFO]</code>
+                </li>
+                <li>
+                    <strong>Insertar un grafo (POST):</strong><br>
+                    <code class="inline">curl -X POST --header 'Content-type: text/turtle' --data-binary '@ejemplo.ttl' http://[IP]:7200/repositories/[REPO]/rdf-graphs/service?graph=[URI_DEL_GRAFO]</code>
+                </li>
+                <li>
+                    <strong>Sobrescribir un grafo (PUT):</strong><br>
+                    <code class="inline">curl -X PUT --header 'Content-type: text/turtle' --data-binary '@ejemplo2.ttl' http://[IP]:7200/repositories/[REPO]/rdf-graphs/service?graph=[URI_DEL_GRAFO]</code>
+                </li>
+                <li>
+                    <strong>Borrar un grafo (DELETE):</strong><br>
+                    <code class="inline">curl -X DELETE http://[IP]:7200/repositories/[REPO]/rdf-graphs/service?graph=[URI_DEL_GRAFO]</code>
+                </li>
+                <li>
+                    <strong>Exportar Backup (TriG):</strong><br>
+                    <code class="inline">curl -X GET -H "Accept: application/x-trig" http://[IP]:7200/repositories/[REPO]/statements > backup.trig</code>
+                </li>
+                <li>
+                    <strong>Ejecutar consulta SPARQL (POST):</strong><br>
+                    <code class="inline">curl -X POST -H "Content-Type: application/sparql-query" -H "Accept: application/sparql-results+json" --data 'SELECT * WHERE { ?s ?p ?o } LIMIT 10' http://[IP]:7200/repositories/[REPO]</code>
+                </li>
+                <li>
+                    <strong>Limpiar todo el repositorio:</strong><br>
+                    <code class="inline">curl -X DELETE http://[IP]:7200/repositories/[REPO]/statements</code>
+                </li>
+                <li>
+                    <strong>Realizar Backup (API REST):</strong><br>
+                    <code class="inline">curl -X POST http://[IP]:7200/rest/recovery/backup</code> 
+                    <span class="comment"># Crea una copia de seguridad en el servidor</span>
+                </li>
+                <li>
+                    <strong>Crear Repositorio:</strong><br>
+                    <code class="inline">curl -X POST -H "Content-Type: multipart/form-data" -F "config=@config.ttl" http://[IP]:7200/rest/repositories</code>
+                </li>
+            </ul>
+        </div>
+        
+        <div id="shacl" class="tab-content">
+            <h2>SHACL</h2>
+            <p class="description-block">El "Shapes Constraint Language" es un estándar de la Web Semántica utilizado para validar la estructura y el contenido de los grafos RDF. Se comporta de manera similar a JSON Schema en MongoDB, permitiendo asegurar la calidad de los datos forzando reglas de tipado, cardinalidades o restricciones de valores.</p>
+
+            <h3>Shapes y Objetivos</h3>
+            <ul class="concept-list">
+                <li><code class="inline">sh:NodeShape</code>: Restricciones sobre un nodo entero.</li>
+                <li><code class="inline">sh:PropertyShape</code>: Restricciones sobre una propiedad específica.</li>
+                <li><code class="inline">sh:targetClass</code>: Aplica la validación a todas las instancias de una clase.</li>
+            </ul>
+
+            <h3>Restricciones comunes</h3>
+            <ul class="concept-list">
+                <li><code class="inline">sh:minCount</code> / <code class="inline">sh:maxCount</code>: Cardinalidad obligatoria.</li>
+                <li><code class="inline">sh:datatype</code>: Obliga a un tipo de dato (ej: <code class="inline">xsd:integer</code>).</li>
+                <li><code class="inline">sh:pattern</code>: El valor debe cumplir una expresión regular.</li>
+                <li><code class="inline">sh:closed true</code>: No permite propiedades que no estén definidas en el shape.</li>
+            </ul>
+
+            <h3>Estructura SHACL</h3>
+<pre><code><span class="keyword">prefix</span> : &lt;<span class="string">http://ejemplo.com/ns#</span>&gt; .
+<span class="keyword">prefix</span> sh: &lt;<span class="string">http://www.w3.org/ns/shacl#</span>&gt; .
+<span class="keyword">prefix</span> xsd: &lt;<span class="string">http://www.w3.org/2001/XMLSchema#</span>&gt; .
+<span class="keyword">prefix</span> schema: &lt;<span class="string">http://schema.org/</span>&gt; .
+
+:UserShape <span class="keyword">a</span> sh:NodeShape;       <span class="comment"># decir que UserShape es de tipo sh:NodeShape (a = rdf:type)</span>
+   sh:targetClass :User ;        <span class="comment"># Definir la clase a la que se aplica</span>
+   
+   sh:property [                 <span class="comment"># Cada restriccion a cada campo</span>
+    sh:path     schema:name ;    <span class="comment"># A qué predicado se aplica la restriccion</span>
+    sh:minCount 1;               <span class="comment"># Minimo cuantas relaciones tienes que haber de ese tipo</span>
+    sh:maxCount 1;               <span class="comment"># Maximo cuantas relaciones tienes que haber de ese tipo</span>
+    sh:datatype xsd:string ;     <span class="comment"># El tipo de dato al que tiene que apuntar esa relacion</span>
+  ] ;
+
+  sh:property [
+   sh:path schema:gender ;
+   sh:minCount 1;
+   sh:maxCount 1;
+   sh:or (                       
+    [ sh:in (schema:Male schema:Female) ] <span class="comment"># Que el objeto sea literally una de esas opciones</span>
+    [ sh:datatype xsd:string ]
+   )
+  ] ;
+
+  sh:property [
+   sh:path     schema:knows ;
+   sh:nodeKind sh:IRI ;          <span class="comment"># A qué tipo de nodo puede apuntar la relación (IRI: que apunte a otro recurso)</span>
+   sh:class    :User ;           <span class="comment"># A qué tipo de clase tiene que apuntar la relacion</span>
+  ] .</code></pre>
+        </div>
+
+        <div id="owl" class="tab-content">
+            <h2>OWL</h2>
+            <p class="description-block">El "Web Ontology Language" es el lenguaje de modelado más potente y formal de la Web Semántica. Se fundamenta en Lógicas Descriptivas y permite construir ontologías avanzadas. A través de razonadores informáticos (reasoners), OWL permite a los sistemas "inferir" e "imaginar" nuevo conocimiento implícito que no estaba explícitamente guardado en la base de datos.</p>
+
+            <h3>Relaciones entre Clases</h3>
+            <ul class="concept-list">
+                <li><code class="inline">owl:equivalentClass</code>: Dos clases son idénticas.</li>
+                <li><code class="inline">owl:disjointWith</code>: Un individuo NO puede pertenecer a ambas clases a la vez.</li>
+            </ul>
+
+            <h3>Object properties</h3>
+            <ul class="concept-list">
+                <li><strong>Domain:</strong> Qué clase pueden ser sujetos de esa relación.</li>
+                <li><strong>Range:</strong> Qué clase puede ser el objeto de esa relación.</li>
+            </ul>
+
+            <h3>Restricciones (Subclass Of)</h3>
+            <ul class="concept-list">
+                <li><strong>VALUE:</strong> La relación debe apuntar a un individuo concreto (Ejemplo: <code class="inline">vive_en value Madrid</code>).</li>
+                <li><strong>SOME (<code class="inline">owl:someValuesFrom</code>):</strong> Tiene que existir al menos una relación para esa clase a la clase objeto.</li>
+                <li><strong>ONLY (<code class="inline">owl:allValuesFrom</code>):</strong> Solo puede haber relaciones de esa clase a la clase objeto (Ej: <code class="inline">Rueda es parte de only coche</code>).</li>
+                <li><strong>MIN / MAX / EXACTLY:</strong> Tiene que haber mínimo, máximo o exactamente 'x' relaciones de esa clase a la clase objeto (puede haber otras relaciones con otras clases).</li>
+            </ul>
+
+            <h3>Características de Object Properties</h3>
+            <ul class="concept-list">
+                <li><strong>TRANSITIVE:</strong> Si A &rarr; B y B &rarr; C entonces A &rarr; C.</li>
+                <li><strong>SYMMETRIC:</strong> A &harr; B.</li>
+                <li><strong>FUNCTIONAL:</strong> Un sujeto solo puede apuntar a un destino con esa relación (una persona solo puede tener una fecha de nacimiento).</li>
+                <li><strong>INVERSE FUNCTIONAL:</strong> Un destino solo puede ser apuntado por un único sujeto (un ID de empleado solo puede ser apuntado por una única persona).</li>
+                <li><strong>INVERSE OF (INVERSA):</strong> Definir qué relaciones son inversas (Ej: El coche vale más que la moto // La moto vale menos que el coche).</li>
+            </ul>
+        </div>
+
+    </main>
+
+    <script>
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].classList.remove("active");
+            }
+            tablinks = document.getElementsByClassName("tab-btn");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove("active");
+            }
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+    </script>
+</body>
+</html>
